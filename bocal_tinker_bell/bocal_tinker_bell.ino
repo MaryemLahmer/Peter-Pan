@@ -1,90 +1,65 @@
-#define TOUCH_PIN 12 // (maillage autour du bocal)
-#define LED1 14 
-#define LED2 13 
-#define LED3 27 
+#define TOUCH_PIN 12   // T5 touch
+#define LED1 14
+#define LED2 13
+#define LED3 27
 
-
-int threshold = 200; // a calibrer selon le maillage
+int threshold = 200;
 
 void setup() {
   Serial.begin(115200);
+
   pinMode(LED1, OUTPUT);
   pinMode(LED2, OUTPUT);
   pinMode(LED3, OUTPUT);
-
-  digitalWrite(LED1, LOW);
-  digitalWrite(LED2, LOW);
-  digitalWrite(LED3, LOW);
-
 }
 
 void loop() {
   int touchValue = touchRead(TOUCH_PIN);
-  Serial.println(touchValue); //pour calibrer
+  //Serial.println(touchValue);
 
-  if (touchValue < threshold){
+  if (touchValue < threshold) {
     fadeIn();
-    sparkle();
+    //sparkle();
     fadeOut();
   }
 
-  delay(50);
-
+  delay(40);
 }
 
-void fadeIn(){
-  for (int i =0; i<3; i++){
-    digitalWrite(LED1, HIGH);
-    delay(100);
-    digitalWrite(LED2, HIGH);
-    delay(100);
-    digitalWrite(LED3, HIGH);
-    delay(100);
+// ------------------------
+void fadeIn() {
+  for (int i = 0; i <= 255; i++) {
+    analogWrite(LED1, i);
+    analogWrite(LED2, i);
+    analogWrite(LED3, i);
+    delay(4);
   }
 }
 
-
-void sparkle(){
-  for (int i = 0; i < 20; i++) {
-    int r = random(1,4);
-    if (r == 1) digitalWrite(LED1, HIGH);
-    if (r == 2) digitalWrite(LED2, HIGH);
-    if (r == 3) digitalWrite(LED3, HIGH);
-
-    delay(random(50,120));
-
-    digitalWrite(LED1, LOW);
-    digitalWrite(LED2, LOW);
-    digitalWrite(LED3, LOW);
-
-    delay(random(50,120));
-  }
-}
-
-// Extinction douce
 void fadeOut() {
-  digitalWrite(LED1, LOW);
-  delay(150);
-  digitalWrite(LED2, LOW);
-  delay(150);
-  digitalWrite(LED3, LOW);
+  for (int i = 255; i >= 0; i--) {
+    analogWrite(LED1, i);
+    analogWrite(LED2, i);
+    analogWrite(LED3, i);
+    delay(4);
+  }
 }
 
+void sparkle() {
+  for (int s = 0; s < 30; s++) {
+    int brightness = random(50, 255);
+    int selected = random(1,4);
 
+    if (selected == 1) analogWrite(LED1, brightness);
+    if (selected == 2) analogWrite(LED2, brightness);
+    if (selected == 3) analogWrite(LED3, brightness);
 
+    Serial.println(selected);
+    Serial.println(brightness);
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    delay(100);
+    analogWrite(LED1, 0);
+    analogWrite(LED2, 0);
+    analogWrite(LED3, 0);
+  }
+}
