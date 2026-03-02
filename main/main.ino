@@ -3,7 +3,7 @@
 
 #define STEP 51
 
-OracleTouch touch(4, 34);
+OracleTouch touch(4);
 
 Adafruit_NeoPixel strip(8, 2, NEO_GRB + NEO_KHZ800);
 
@@ -45,9 +45,9 @@ void setup() {
 void loop() {
   touch.update();
   Serial.println(touch.getTouchCount());
-  //exp1(touch.getTouchCount());
   int p = touch.getTouchCount();
   exp2(p);
+  //exp2(p);
   //pixieDustExplosion();
   delay(10);
   
